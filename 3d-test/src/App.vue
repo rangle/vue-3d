@@ -40,14 +40,25 @@ function init() {
   ////////////////////////////////////////////
   // OBJECT CREATION
   var geometry1 = new THREE.BoxGeometry( 1, 1, 1 ); //provides the vertices and faces
-  var material1 = new THREE.MeshBasicMaterial( { color: 0xFF5733 } ); //provides the color
+  var material1 = new THREE.MeshPhongMaterial( { color: 0xffffff,} );
   cube1 = new THREE.Mesh( geometry1, material1 ); // takes an object and applies the material1 to it. 
   cube1.position.x = -2;
 
   var geometry2 = new THREE.BoxGeometry( 1, 1, 1 ); //provides the vertices and faces
-  var material2 = new THREE.MeshBasicMaterial( { color: 0x20ff11 } ); //provides the color
+  var material2 = new THREE.MeshPhongMaterial( { color: 0x20ff11 } ); //provides the color
   cube2 = new THREE.Mesh( geometry2, material2 ); // takes an object and applies the material1 to it. 
   cube2.position.x = 2;
+
+  //LIGHTNING
+  //first point light
+  var light = new THREE.PointLight(0xffffff, 1, 4000);
+  light.position.set(50, 0, 0);
+  //the second one
+  var light_two = new THREE.PointLight(0xffffff, 1, 4000);
+  light_two.position.set(-100, 800, 800);
+  //And another global lightning some sort of cripple GL
+  var lightAmbient = new THREE.AmbientLight(0x404040);
+  scene.add(light, light_two, lightAmbient);
 
   // referencing the scene we created earlier. 
   scene.add( cube2 ); // by default, added to (0,0,0) (Same as the camera. )
