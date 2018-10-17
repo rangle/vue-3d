@@ -9,7 +9,6 @@
 <script>
 import * as THREE from 'three';
 
-
 var twitterAuthHeader;
 
 authTwitter().then((val) => {
@@ -91,6 +90,15 @@ export default {
   }
 }
 
+
+async function authTwitter() {
+  const resp = await fetch("http://localhost:8081/auth/twitter", {
+    method: "POST"
+  })
+
+  const body = await resp.json();
+  twitterAuthHeader = body.authHeaderValue
+}
 
 function getMeNasaTweets() {
   // const nasaTweets = await fetch("https://api.twitter.com/1.1/search/tweets.json?q=nasa&count=1", {
