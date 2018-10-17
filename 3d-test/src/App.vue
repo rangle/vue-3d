@@ -9,6 +9,13 @@
 <script>
 import * as THREE from 'three';
 
+
+var twitterAuthHeader;
+
+authTwitter().then((val) => {
+  getMeNasaTweets();  
+})
+
 export default {
   name: 'app',
   data: function() {
@@ -82,6 +89,31 @@ export default {
   mounted: function () { //starts animation loop. 
     this.animate();
   }
+}
+
+
+function getMeNasaTweets() {
+  // const nasaTweets = await fetch("https://api.twitter.com/1.1/search/tweets.json?q=nasa&count=1", {
+  //   method: "POST",
+  //   headers: {
+  //     "Authorization": twitterAuthHeader,
+  //     "Access-Control-Allow-Origin": "*"
+  //   }
+  // })
+  // const respBody = await nasaTweets.json();
+  // console.log(respBody);
+  try {
+    const resp = fetch("http://localhost:8081/getStuff", {
+      method: "GET"
+    })
+    .then()
+    .catch(err => console.log(err.message))
+    const data = await resp.json();
+    console.log(data);
+  } catch (e) {
+    console.log(e.message);
+    }
+  
 }
 
 </script>
