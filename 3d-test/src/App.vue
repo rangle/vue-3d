@@ -11,8 +11,13 @@ import * as THREE from 'three';
 var camera, scene, renderer;
 var cube2, cube1;
 
+var twitterAuthHeader;
+
 init();
-animate(); 
+animate();
+authTwitter().then((val) => {
+  getMeNasaTweets();  
+})
 
 export default {
   name: 'app',
@@ -68,6 +73,39 @@ function animate() { //creates a loop with requestAnimationFrame to refresh 60ti
   cube1.rotation.y -= 0.01;
 
 	renderer.render( scene, camera );
+}
+
+async function authTwitter() {
+  const resp = await fetch("http://localhost:8081/auth/twitter", {
+    method: "POST"
+  })
+
+  const body = await resp.json();
+  twitterAuthHeader = body.authHeaderValue
+}
+
+function getMeNasaTweets() {
+  // const nasaTweets = await fetch("https://api.twitter.com/1.1/search/tweets.json?q=nasa&count=1", {
+  //   method: "POST",
+  //   headers: {
+  //     "Authorization": twitterAuthHeader,
+  //     "Access-Control-Allow-Origin": "*"
+  //   }
+  // })
+  // const respBody = await nasaTweets.json();
+  // console.log(respBody);
+  try {
+    const resp = fetch("http://localhost:8081/getStuff", {
+      method: "GET"
+    })
+    .then()
+    .catch(err => console.log(err.message))
+    const data = await resp.json();
+    console.log(data);
+  } catch (e) {
+    console.log(e.message);
+    }
+  
 }
 
 

@@ -4,10 +4,15 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
+    "start": "concurrently --kill-others-on-fail \"npm run serve\" \" npm run server\"",
+    "server": "nodemon src/server/server.js",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "form-data": "^2.3.2",
+    "node-fetch": "^2.2.0",
+    "nodemon": "^1.18.4",
     "three": "^0.97.0",
     "vue": "^2.5.17",
     "vue-gl": "^0.7.1"
