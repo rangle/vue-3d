@@ -16,7 +16,8 @@ export default {
       scene: {},
       camera: {},
       renderer: {},
-      cube: {}
+      cube: {},
+      audioCtx: {}
     };
   },
   methods: {
@@ -74,7 +75,6 @@ export default {
     this.camera.position.z = 5; // to move the camera outside of the object.
   },
   mounted: function() {
-    //starts animation loop.
     let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     let userMedia =
       navigator.webkitGetUserMedia ||
@@ -82,10 +82,8 @@ export default {
       navigator.msGetUserMedia;
     let source;
     var analyser = audioCtx.createAnalyser();
-    analyser.smoothingTimeConstant = 0.85;
+    analyser.smoothingTimeConstant = 0.9;
     analyser.fftSize = 32;
-    // analyser.minDecibels = -90;
-    // analyser.maxDecibels = -10;
     navigator.mediaDevices.getUserMedia = constraints =>
       new Promise(function(resolve, reject) {
         userMedia.call(navigator, constraints, resolve, reject);
@@ -106,7 +104,7 @@ export default {
     let audioLoop = function() {
       requestAnimationFrame(audioLoop);
       analyser.getByteFrequencyData(dataArray);
-      anim(dataArray[0], dataArray[3], dataArray[7]);
+      anim(dataArray[2], dataArray[4], dataArray[7]);
       console.log(dataArray);
     };
     audioLoop();
