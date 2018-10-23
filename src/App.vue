@@ -68,6 +68,13 @@ export default {
       this.$data.cube.rotation.x += 0.02;
       this.$data.cube.rotation.y += 0.01;
 
+      // change color depending on audio values
+      this.$data.analyser.getByteFrequencyData(this.$data.dataArray);
+      let redVal = this.$data.dataArray[3] / 255;
+      let greenVal = this.$data.dataArray[5] / 255;
+      let blueVal = this.$data.dataArray[7] / 255;
+      this.cube.material.color.setRGB(redVal, greenVal, blueVal);
+
       // render scene with camera.
       this.$data.renderer.render(this.$data.scene, this.$data.camera);
     },
@@ -116,9 +123,6 @@ export default {
 
       let length = this.$data.analyser.frequencyBinCount;
       this.$data.dataArray = new Uint8Array(length);
-
-      this.$data.analyser.getByteFrequencyData(this.$data.dataArray);
-      console.log(this.$data.dataArray); // should return an array of 0s.
     }
   },
   // called when App component mounts.
