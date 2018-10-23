@@ -78,6 +78,7 @@ export default {
       // render scene with camera.
       this.$data.renderer.render(this.$data.scene, this.$data.camera);
     },
+    // addLight creates three different lights & adds to scene
     addLight: function() {
       this.$data.light1.position.set(-100, 800, 800);
       this.$data.light2.position.set(50, 0, 0);
@@ -88,8 +89,10 @@ export default {
       );
     },
     addAudioInput: function() {
-      // audio context serves as a way to connect the
+      // AudioContext: provides interface for source & analyser to communicate through
       let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+      // UserMedia: used inside Promise below to get audio input from user.
       let userMedia =
         navigator.webkitGetUserMedia ||
         navigator.mozGetUserMedia ||
@@ -109,7 +112,7 @@ export default {
         });
 
       navigator.mediaDevices
-        .getUserMedia({ audio: true }) // ask for audio permission
+        .getUserMedia({ audio: true }) // ask for audio permission (constraints)
         .then(
           function(stream) {
             // if successful, given an audio stream.
