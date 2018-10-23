@@ -30,7 +30,11 @@ export default {
       // Light: gives scene light sources.
       light1: new THREE.PointLight(0xffffff, 1, 4000),
       light2: new THREE.PointLight(0xffffff, 1, 4000),
-      lightAmbient: new THREE.AmbientLight(0x404040)
+      lightAmbient: new THREE.AmbientLight(0x404040),
+
+      // Audio Input needed for animate loop.
+      analyser: {},
+      audioArray: []
     };
   },
   methods: {
@@ -75,6 +79,46 @@ export default {
         this.$data.light2,
         this.$data.lightAmbient
       );
+    },
+    addAudioInput: function() {
+      // audio context serves as a way to connect the
+      let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      let userMedia =
+        navigator.webkitGetUserMedia ||
+        navigator.mozGetUserMedia ||
+        navigator.msGetUserMedia; // varies depending on browser type
+      let source; // source of audio input (defined later)
+
+      // Analyser: will process audio and give values.
+      this.$data.analyser = audioCtx.createAnalyser();
+      this.$data.analyser.smoothingTimeConstant = 0.9; // smoothes audio values.
+      this.$data.analyser.fftSize = 32; // size of AudioArray
+
+      navigator.mediaDevices.getUserMedia = constraints =>
+        new Promise(function(resolve, reject) {
+          // .call will execute immediately and resolve with an
+          // audio stream or error (as seen below)
+          userMedia.call(navigator, constraints, resolve, reject);
+        });
+
+      navigator.mediaDevices
+        .getUserMedia({ audio: true }) // ask for audio permission
+        .then(
+          function(stream) {
+            // if successful, given an audio stream.
+            source = audioCtx.createMediaStreamSource(stream);
+            source.connect(this.$data.analyser);
+          }.bind(this) // bind allows function access to 'this'
+        )
+        .catch(function(err) {
+          console.log(err);
+        });
+
+      let length = this.$data.analyser.frequencyBinCount;
+      this.$data.dataArray = new Uint8Array(length);
+
+      this.$data.analyser.getByteFrequencyData(this.$data.dataArray);
+      console.log(this.$data.dataArray); // should return an array of 0s.
     }
   },
   // called when App component mounts.
@@ -82,6 +126,7 @@ export default {
     this.init();
     this.createCube();
     this.addLight();
+    this.addAudioInput();
     this.animate();
   }
 };
