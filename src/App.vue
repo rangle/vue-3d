@@ -25,7 +25,12 @@ export default {
       renderer: new THREE.WebGLRenderer(),
 
       // Cube: cube object to render.
-      cube: {}
+      cube: {},
+
+      // Light: gives scene light sources.
+      light1: new THREE.PointLight(0xffffff, 1, 4000),
+      light2: new THREE.PointLight(0xffffff, 1, 4000),
+      lightAmbient: new THREE.AmbientLight(0x404040)
     };
   },
   methods: {
@@ -44,7 +49,7 @@ export default {
       let geometry = new THREE.BoxGeometry(1, 1, 1);
 
       // material to display
-      let material = new THREE.MeshBasicMaterial({ color: 0x00ff0 });
+      let material = new THREE.MeshPhongMaterial({ color: 0xffffff });
 
       // applies material & geometry
       this.$data.cube = new THREE.Mesh(geometry, material);
@@ -61,12 +66,22 @@ export default {
 
       // render scene with camera.
       this.$data.renderer.render(this.$data.scene, this.$data.camera);
+    },
+    addLight: function() {
+      this.$data.light1.position.set(-100, 800, 800);
+      this.$data.light2.position.set(50, 0, 0);
+      this.$data.scene.add(
+        this.$data.light1,
+        this.$data.light2,
+        this.$data.lightAmbient
+      );
     }
   },
   // called when App component mounts.
   mounted: function() {
     this.init();
     this.createCube();
+    this.addLight();
     this.animate();
   }
 };
