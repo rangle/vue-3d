@@ -4,10 +4,10 @@
 </template>
 
 <script>
-import * as THREE from "three";
+import * as THREE from 'three';
 
 export default {
-  name: "app",
+  name: 'app',
   data: function() {
     return {
       // Scene: What and where to render.
@@ -50,10 +50,10 @@ export default {
     // createCube creates a cube & adds to canvas
     createCube: function() {
       // vertices and faces
-      let geometry = new THREE.BoxGeometry(1, 1, 1);
+      const geometry = new THREE.BoxGeometry(1, 1, 1);
 
       // material to display
-      let material = new THREE.MeshPhongMaterial({ color: 0xffffff });
+      const material = new THREE.MeshPhongMaterial({ color: 0xffffff });
 
       // applies material & geometry
       this.$data.cube = new THREE.Mesh(geometry, material);
@@ -70,9 +70,9 @@ export default {
 
       // change color depending on audio values
       this.$data.analyser.getByteFrequencyData(this.$data.dataArray);
-      let redVal = this.$data.dataArray[3] / 255;
-      let greenVal = this.$data.dataArray[5] / 255;
-      let blueVal = this.$data.dataArray[7] / 255;
+      const redVal = this.$data.dataArray[3] / 255;
+      const greenVal = this.$data.dataArray[5] / 255;
+      const blueVal = this.$data.dataArray[7] / 255;
       this.cube.material.color.setRGB(redVal, greenVal, blueVal);
 
       // render scene with camera.
@@ -90,10 +90,10 @@ export default {
     },
     addAudioInput: function() {
       // AudioContext: provides interface for source & analyser to communicate through
-      let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
       // UserMedia: used inside Promise below to get audio input from user.
-      let userMedia =
+      const userMedia =
         navigator.webkitGetUserMedia ||
         navigator.mozGetUserMedia ||
         navigator.msGetUserMedia; // varies depending on browser type
@@ -124,7 +124,7 @@ export default {
           console.log(err);
         });
 
-      let length = this.$data.analyser.frequencyBinCount;
+      const length = this.$data.analyser.frequencyBinCount;
       this.$data.dataArray = new Uint8Array(length);
     }
   },
